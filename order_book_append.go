@@ -37,7 +37,7 @@ func (ob *OrderBook) Append(side Side, amount, price decimal.Decimal) error {
 	listElement, ok := ob.orders[order.id]
 
 	if side == Buy {
-		if ok {
+		if ok && ob.bids.size > 0 {
 			ob.bids.UpdateAmount(listElement, amount)
 		} else {
 			ob.orders[order.id] = ob.bids.Append(order)
@@ -46,7 +46,7 @@ func (ob *OrderBook) Append(side Side, amount, price decimal.Decimal) error {
 		return nil
 	}
 
-	if ok {
+	if ok && ob.asks.size > 0 {
 		ob.asks.UpdateAmount(listElement, amount)
 	} else {
 		ob.orders[order.id] = ob.asks.Append(order)
